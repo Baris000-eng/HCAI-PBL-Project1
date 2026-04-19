@@ -3,7 +3,7 @@
 {% block content %}
 <div class="box" style="padding: 30px; max-width: 1000px; margin: auto;">
     <h2 style="color: #275CB2; border-bottom: 2px solid #275CB2; padding-bottom: 10px;">
-        Model Performance Results:
+        Model Performance Results
     </h2>
 
     <div style="margin-top: 25px;">
@@ -39,10 +39,10 @@
 
         <div style="display: flex; flex-wrap: wrap; gap: 30px;">
             {% if classification_report %}
-            <div style="flex: 1; min-width: 350px;">
-                <h4 style="color: #333;">Classification Report</h4>
-                <pre style="background: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd; font-family: 'Courier New', Courier, monospace; line-height: 1.5; overflow-x: auto;">{{ classification_report }}</pre>
-            </div>
+                <div style="flex: 1; min-width: 350px;">
+                    <h4 style="color: #333;">Classification Report</h4>
+                    <pre style="background: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd; font-family: 'Courier New', Courier, monospace; line-height: 1.5; overflow-x: auto;">{{ classification_report }}</pre>
+                </div>
             {% endif %}
 
             {% if confusion_matrix %}

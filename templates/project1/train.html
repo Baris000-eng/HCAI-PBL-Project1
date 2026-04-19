@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="box" style="padding: 20px;">
+    <h2>Machine Learning Model Configuration</h2>
+    
+    <form method="post" action="{% url 'project1:train' %}">
+        {% csrf_token %}
+        <div style="margin-bottom: 15px;">
+            <label>Model Type:</label>
+            <select name="model_type" style="padding: 5px;">
+                <option value="rfc">Random Forest Classifier</option>
+                <option value="dtc">Decision Tree Classifier</option>
+                <option value="svm">Support Vector Machine Classifier</option>
+                <option value="knn">K-Nearest Neighbors Classifier</option>
+            </select>
+        </div>
+
+        <div style="margin: 20px 0;">
+            <label><strong>Test Data Split Ratio:</strong></label>
+            <input type="range" name="split_ratio" min="0.1" max="0.8" step="0.05" value="0.2" 
+                   oninput="this.nextElementSibling.value = (this.value * 100).toFixed(0) + '%'">
+            <output>20%</output>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <strong>Select Evaluation Metrics:</strong><br>
+            <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 10px;">
+                <label><input type="checkbox" name="metrics" value="accuracy"> Accuracy</label>
+                <label><input type="checkbox" name="metrics" value="precision"> Precision</label>
+                <label><input type="checkbox" name="metrics" value="recall"> Recall</label>
+                <label><input type="checkbox" name="metrics" value="f1_score"> F1-Score</label>
+                <label><input type="checkbox" name="metrics" value="confusion_matrix"> Confusion Matrix</label>
+                <label><input type="checkbox" name="metrics" value="classification_report"> Classification Report</label>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <button type="submit" style="background-color: #28a745; color: white;">Start Training The Model</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

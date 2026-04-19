@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
@@ -13,21 +13,38 @@ import io
 from sklearn.metrics import (accuracy_score, precision_score, recall_score, f1_score, classification_report, confusion_matrix)
 
 def index(request):
-    context = {}
     if request.method == "POST" and request.FILES.get('csv_file'):
         csv_file = request.FILES['csv_file']
         df = pd.read_csv(csv_file)
         
-        chart_data = []
-        for i in range(min(len(df), 200)): 
-            chart_data.append({'x': float(df.iloc[i, 0]), 'y': float(df.iloc[i, 1])})
-        
-        context['chart_data'] = json.dumps(chart_data)
-        context['columns'] = df.columns.tolist()
-        
         request.session['df_json'] = df.to_json()
+        
+        return redirect('project1:visualize')
 
-    return render(request, "project1/index.html", context)
+    return render(request, "project1/index.html")
+
+
+def visualize(request):
+
+    df_json = request.session.get('df_json')
+    
+    if not df_json:
+        return redirect('project1:upload') 
+
+    df = pd.read_json(io.StringIO(df_json))
+    
+    chart_data = []
+    for i in range(min(len(df), 200)): 
+        chart_data.append({'x': float(df.iloc[i, 0]), 'y': float(df.iloc[i, 1])})
+
+    numeric_columns = df.select_dtypes(include=['number']).columns.tolist()
+    context = {
+        'chart_data': json.dumps(chart_data),
+        'columns': numeric_columns,
+        'full_data': json.dumps(df.values.tolist()) 
+    }
+    
+    return render(request, "project1/visualize.html", context)
 
 def train(request):
     context = {}
@@ -61,6 +78,7 @@ def train(request):
             
             model.fit(X_train, y_train)
 
+            # Evaluate the model
             y_pred = model.predict(X_test)
 
             # Calculate evaluation metrics
@@ -80,11 +98,10 @@ def train(request):
             if 'confusion_matrix' in selected_metrics: 
                 context['confusion_matrix'] = confusion_matrix(y_test, y_pred).tolist()
 
-
-
-
             context['model_run'] = True
+
+            return render(request, "project1/results.html", context)
             
-    return render(request, "project1/results.html", context)
+    return render(request, "project1/train.html")
 
 # Create your views here.
