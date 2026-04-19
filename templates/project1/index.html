@@ -14,7 +14,7 @@
 
     {% if chart_data %}
         <hr>
-        <h3>Veri Görselleştirme (İlk 2 Sütun)</h3>
+        <h3>Veri Görselleştirme (First 2 Columns)</h3>
         <div style="position: relative; height:40vh; width:80vw; margin: auto;">
             <canvas id="myChart"></canvas>
         </div>
@@ -22,21 +22,23 @@
         <hr>
         <form method="post" action="{% url 'project1:train' %}">
             {% csrf_token %}
-            <h3>Makine Öğrenmesi Modeli</h3>
+            <h3>Machine Learning Model</h3>
             <div style="margin-bottom: 15px;">
-                <label>Model Türü:</label>
+                <label>Model Type:</label>
                 <select name="model_type" style="padding: 5px;">
-                    <option value="rfc">Random Forest (Sınıflandırma)</option>
-                    <option value="lr">Lineer Regresyon</option>
+                    <option value="rfc">Random Forest Classifier</option>
+                    <option value="dtc">Decision Tree Classifier</option>
+                    <option value="svm">Support Vector Machine Classifier</option>
+                    <option value="knn">K-Nearest Neighbors Classifier</option>
                 </select>
             </div>
-            <button type="submit" style="width: auto; padding: 0 15px;">Modeli Eğit</button>
+            <button type="submit" style="width: auto; padding: 0 15px;">Train The Model</button>
         </form>
     {% endif %}
 
     {% if score is not None %}
         <div style="margin-top: 20px; padding: 15px; background: #e7f3ff; border-radius: 5px; color: #333;">
-            <strong>Model Başarı Skoru:</strong> {{ score|floatformat:4 }}
+            <strong>Model Accuracy Score:</strong> {{ score|floatformat:4 }}
         </div>
     {% endif %}
 </div>
@@ -44,16 +46,13 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-    // Veriyi JavaScript tarafında güvenli bir şekilde yakalayalım
     document.addEventListener('DOMContentLoaded', function() {
         const chartElement = document.getElementById('myChart');
         
-        // Django'dan gelen veriyi string olarak alıp JSON.parse ile objeye çevirmek en güvenli yoldur
         const rawData = '{{ chart_data|safe }}';
         
         if (chartElement && rawData && rawData !== 'None' && rawData !== '') {
             try {
-                // Veriyi temizleyip parse ediyoruz
                 const formattedData = JSON.parse(rawData.replace(/'/g, '"'));
                 
                 const ctx = chartElement.getContext('2d');

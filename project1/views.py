@@ -2,8 +2,13 @@ from django.shortcuts import render
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.linear_model import LinearRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+
+from sklearn.preprocessing import LabelEncoder
 import json 
+import io 
 
 def index(request):
     context = {}
@@ -12,7 +17,7 @@ def index(request):
         df = pd.read_csv(csv_file)
         
         chart_data = []
-        for i in range(min(len(df), 150)): 
+        for i in range(min(len(df), 200)): 
             chart_data.append({'x': float(df.iloc[i, 0]), 'y': float(df.iloc[i, 1])})
         
         context['chart_data'] = json.dumps(chart_data)
@@ -24,12 +29,16 @@ def index(request):
 
 def train(request):
     context = {}
+    df_json = request.session.get('df_json')
     if request.method == "POST":
-        df_json = request.session.get('df_json')
         if df_json:
-            df = pd.read_json(df_json)
+            df = pd.read_json(io.StringIO(df_json))
             X = df.iloc[:, :-1]
             y = df.iloc[:, -1]
+
+            if y.dtype == 'object':
+                le = LabelEncoder()
+                y = le.fit_transform(y)
             
             model_type = request.POST.get('model_type')
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
@@ -37,9 +46,16 @@ def train(request):
             if model_type.lower() == 'rfc':
                 model = RandomForestClassifier()
                 model.fit(X_train, y_train)
-            else:
-                model = LinearRegression()
+            elif model_type.lower() == 'svm': 
+                model = SVC() 
                 model.fit(X_train, y_train)
+            elif model_type.lower() == 'knn': 
+                model = KNeighborsClassifier()
+                model.fit(X_train, y_train) 
+            elif model_type.lower() == 'dtc': 
+                model = DecisionTreeClassifier() 
+                model.fit(X_train, y_train) 
+
             
             context['score'] = model.score(X_test, y_test)
             context['model_run'] = True
