@@ -9,7 +9,7 @@
 
     <div style="margin: 20px; display: flex; gap: 20px; justify-content: center;">
         <div>
-            <label>X Axis:</label>
+            <label><strong>X Axis:</strong></label>
             <select id="xColumn" onchange="drawChart()">
                 {% for col in columns %}
                     <option value="{{ forloop.counter0 }}">{{ col }}</option>
@@ -17,7 +17,7 @@
             </select>
         </div>
         <div>
-            <label>Y Axis:</label>
+            <label><strong>Y Axis:</strong></label>
             <select id="yColumn" onchange="drawChart()">
                 {% for col in columns %}
                     <option value="{{ forloop.counter0 }}" {% if forloop.counter == 2 %}selected{% endif %}>{{ col }}</option>
@@ -27,7 +27,7 @@
     </div>
 
     <hr>
-    <div style="text-align: right;">
+    <div style="text-align: center; font-weight: bold">
         <form action="{% url 'project1:train' %}" method="GET">
             <button type="submit" class="button">Proceed to Machine Learning Model Training</button>
         </form>

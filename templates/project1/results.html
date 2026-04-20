@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="box" style="padding: 30px; max-width: 1000px; margin: auto;">
-    <h2 style="color: #275CB2; padding-bottom: 10px;">
+    <h2 style="color: #1e468a; padding-bottom: 10px;">
         Model Performance Results
     </h2>
 
@@ -10,40 +10,42 @@
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin-bottom: 30px;">
             {% if accuracy %}
                 <div style="background: #e7f3ff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                    <span style="color: #666; font-size: 15px; font-weight: bold;">Accuracy</span><br>
-                    <strong style="font-size: 24px; color: #275CB2;">{{ accuracy|floatformat:5 }}</strong>
+                    <span style="color: #666; font-size: 18px; font-weight: bold;">Accuracy</span><br>
+                    <strong style="font-size: 18px; color: #1e468a;">{{ accuracy|floatformat:5 }}</strong>
                 </div>
             {% endif %}
             
             {% if precision %}
                 <div style="background: #e7f3ff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                    <span style="color: #666; font-size: 15px; font-weight: bold;">Precision</span><br>
-                    <strong style="font-size: 24px; color: #275CB2;">{{ precision|floatformat:5 }}</strong>
+                    <span style="color: #666; font-size: 18px; font-weight: bold;">Precision</span><br>
+                    <strong style="font-size: 18px; color: #1e468a;">{{ precision|floatformat:5 }}</strong>
                 </div>
             {% endif %}
             
             {% if recall %}
                 <div style="background: #e7f3ff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                    <span style="color: #666; font-size: 15px; font-weight: bold;">Recall</span><br>
-                    <strong style="font-size: 24px; color: #275CB2;">{{ recall|floatformat:5 }}</strong>
+                    <span style="color: #666; font-size: 18px; font-weight: bold;">Recall</span><br>
+                    <strong style="font-size: 18px; color: #1e468a;">{{ recall|floatformat:5 }}</strong>
                 </div>
             {% endif %}
             
             {% if f1_score %}
                 <div style="background: #e7f3ff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                    <span style="color: #666; font-size: 15px; font-weight: bold;">F1-Score</span><br>
-                    <strong style="font-size: 24px; color: #275CB2;">{{ f1_score|floatformat:5 }}</strong>
+                    <span style="color: #666; font-size: 18px; font-weight: bold;">F1-Score</span><br>
+                    <strong style="font-size: 18px; color: #1e468a;">{{ f1_score|floatformat:5 }}</strong>
                 </div>
             {% endif %}
         </div>
 
         <div style="display: flex; flex-wrap: wrap; gap: 30px; margin-top: 25px; font-family: 'Times New Roman';">
-    
+            
         {% if classification_report %}
-                <div style="flex: 1; min-width: 350px;">
-                    <h4 style="color: #333; font-size: 18px">Classification Report</h4>
-                    <pre style="background: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd; font-family: 'Times New Roman'; line-height: 1.5; overflow-x: auto;">{{ classification_report }}</pre>
-                </div>
+            <div style="flex: 1; min-width: 350px; max-width: 100%;">
+                <h4 style="color: #333; font-size: 18px; margin-bottom: 10px;">Classification Report</h4>
+                <pre style="display: block; width: 100%; box-sizing: border-box; max-height: 400px; 
+                            background: #f8f9fa; color: #333; padding: 20px; border: 1px solid #ddd; border-radius: 8px;
+                            font-family: 'Courier New', Courier, monospace; font-size: 16px; line-height: 1.2; overflow-x: auto; white-space: pre; word-wrap: normal;">{{ classification_report }}</pre>
+            </div>
         {% endif %}
 
         {% if confusion_matrix %}
@@ -54,12 +56,12 @@
                     <thead style="background: #1e468a; color: white;">
                         <tr>
                             <th style="background: transparent; border: none;"></th>
-                            <th colspan="3" style="padding: 12px; font-weight: bold; font-size: 15px; border-bottom: 1px solid rgba(255,255,255,0.2);">
-                            Predicted Labels (Predicted Species)
+                            <th colspan="3" style="padding: 12px; font-weight: bold; font-size: 16px; border-bottom: 1px solid rgba(255,255,255,0.2);">
+                            Predicted Labels <br>(Predicted Species)
                             </th>
                         </tr>
-                            <tr style="font-size: 15px; font-weight: bold">
-                            <th style="padding: 10px; border-right: 1px solid rgba(255,255,255,0.1);">Actual Labels (Actual Species)</th>
+                            <tr style="font-size: 16px; font-weight: bold">
+                            <th style="padding: 10px; border-right: 1px solid rgba(255,255,255,0.1);">Actual Labels <br> (Actual Species)</th>
                             <th style="padding: 10px;">Setosa</th>
                             <th style="padding: 10px;">Versicolor</th>
                             <th style="padding: 10px;">Virginica</th>
@@ -76,7 +78,7 @@
                         </td>
                 
                         {% for cell in row %}
-                            <td style="padding: 15px; background: white; border: 1px solid #eee; font-size: 15px; color: #1e468a; font-weight: bold">
+                            <td style="padding: 15px; background: white; border: 1px solid #eee; font-size: 16px; color: #1e468a; font-weight: bold">
                                 <span style="background: #e7f3ff; padding: 8px 12px; display: inline-block; border-radius: 5px; min-width: 30px;">
                                     {{ cell }}
                                 </span>
@@ -91,14 +93,11 @@
 
 </div>
         </div>
-    <div style="margin-top: 40px; text-align: center;">
-    <a href="{% url 'project1:index' %}" style="text-decoration: none;">
-            <button type="button" 
-                onmouseover="this.style.backgroundColor='#163466'" 
-                onmouseout="this.style.backgroundColor='#1e468a'"
-                style="display: inline-block; padding: 12px 25px; background-color: #1e468a; color: white; font-weight: bold; font-size: 16px; cursor: pointer">
+   <div style="margin-top: 40px; text-align: center;">
+    <a href="{% url 'project1:index' %}"; style="text-decoration: none">
+            <button type="button" style="color: white; font-weight: bold; font-size: 16px">
                 Back to File Upload
-        </button>
+            </button>
     </a>
     </div>
     </div>

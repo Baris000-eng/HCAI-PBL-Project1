@@ -4,10 +4,10 @@
     <h2>Upload Dataset</h2>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <div style="margin: 20px 0;">
+        <div style="margin: 20px 0; font-weight: bold">
             <label>Select CSV File:</label>
             <input type="file" name="csv_file" accept=".csv" required>
-            <button type="submit">Upload CSV Data</button>
+            <button type="submit" style="text-align: center"><strong>Upload CSV Data</strong></button>
         </div>
     </form>
 </div>

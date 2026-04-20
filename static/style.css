@@ -11,7 +11,9 @@ ul {
   text-align: justify;
 }
 
-ul li { padding: 5px 0; }
+ul li { 
+  padding: 5px 0; 
+}
 
 label {
   text-align: justify;

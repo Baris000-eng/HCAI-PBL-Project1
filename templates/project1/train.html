@@ -6,12 +6,13 @@
     <form method="post" action="{% url 'project1:train' %}">
         {% csrf_token %}
         <div style="margin-bottom: 15px;">
-            <label>Model Type:</label>
+            <label><strong>Model Type:</strong></label>
             <select name="model_type" style="padding: 5px;">
                 <option value="rfc">Random Forest Classifier</option>
                 <option value="dtc">Decision Tree Classifier</option>
                 <option value="svm">Support Vector Machine Classifier</option>
                 <option value="knn">K-Nearest Neighbors Classifier</option>
+                <option value="log_reg">Logistic Regression</option>
             </select>
         </div>
 
@@ -23,7 +24,7 @@
         </div>
 
         <div style="margin-top: 20px;">
-            <strong>Select Evaluation Metrics:</strong><br>
+            <label><strong>Select Evaluation Metrics:</strong></label>
             <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 10px;">
                 <label><input type="checkbox" name="metrics" value="accuracy"> Accuracy</label>
                 <label><input type="checkbox" name="metrics" value="precision"> Precision</label>
@@ -34,8 +35,8 @@
             </div>
         </div>
 
-        <div style="margin-top: 30px;">
-            <button type="submit" style="background-color: #28a745; color: white;">Start Training The Model</button>
+        <div style="margin-top: 30px; text-align: center;">
+            <button type="submit" style="font-weight: bold; color: white">Start Training The Model</button>
         </div>
     </form>
 </div>

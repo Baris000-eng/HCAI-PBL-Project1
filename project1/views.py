@@ -7,6 +7,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 
 from sklearn.preprocessing import LabelEncoder
+from sklearn.linear_model import LogisticRegression
 import json 
 import io 
 
@@ -74,6 +75,8 @@ def train(request):
                 model = KNeighborsClassifier()
             elif model_type.lower() == 'dtc': 
                 model = DecisionTreeClassifier() 
+            elif model_type.lower() == 'log_reg': 
+                model = LogisticRegression() 
 
             
             model.fit(X_train, y_train)
@@ -81,7 +84,6 @@ def train(request):
             # Evaluate the model
             y_pred = model.predict(X_test)
 
-            # Calculate evaluation metrics
             if 'accuracy' in selected_metrics:
                 context['accuracy'] = accuracy_score(y_test, y_pred)
 
