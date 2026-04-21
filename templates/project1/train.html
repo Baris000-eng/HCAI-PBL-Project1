@@ -20,22 +20,48 @@
             </select>
         </div>
 
+        <div class="form-group">
+            <label class="label-text">Random Seed Number:</label>
+    
+            <div class="seed-container">
+                <input type="number" id="seed_input" name="random_state" class="select-input" value="42" min="0">
+        
+                <label class="checkbox-label">
+                    <input type="checkbox" id="none_checkbox" onchange="toggleSeed(this)"> Random (None)
+                </label>
+            </div>
+
+            <p class="help-text">
+                Enter a natural number for reproducible results, or check "Random" to change results each time.
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label class="label-text">Class Weight Strategy:</label>
+            <select name="class_weight" class="select-input">
+                <option value="none">None (Equal Weights)</option>
+                <option value="balanced">Balanced (More Weight to Minority Classes)</option>
+            </select>
+        </div>
+
+
+
         <div class="range-container">
             <label class="label-text">Test Data Split Ratio:</label>
-            <input type="range" name="split_ratio" min="0.1" max="0.8" step="0.05" value="0.2" 
+            <input type="range" name="split_ratio" min="0.1" max="0.9" step="0.05" value="0.2" 
                    oninput="this.nextElementSibling.value = (this.value * 100).toFixed(0) + '%'">
             <output>20%</output>
         </div>
 
-        <div class="metrics-section">
+        <div class="eval_metrics_section">
             <label class="label-text">Select Evaluation Metrics:</label>
-            <div class="metrics-wrapper">
-                <label class="checkbox-item"><input type="checkbox" name="metrics" value="accuracy"> Accuracy</label>
-                <label class="checkbox-item"><input type="checkbox" name="metrics" value="precision"> Precision</label>
-                <label class="checkbox-item"><input type="checkbox" name="metrics" value="recall"> Recall</label>
-                <label class="checkbox-item"><input type="checkbox" name="metrics" value="f1_score"> F1-Score</label>
-                <label class="checkbox-item"><input type="checkbox" name="metrics" value="confusion_matrix"> Confusion Matrix</label>
-                <label class="checkbox-item"><input type="checkbox" name="metrics" value="classification_report"> Classification Report</label>
+            <div class="eval_metrics_wrapper">
+                <label class="eval_metric_checkbox_item"><input type="checkbox" name="eval_metrics" value="accuracy"> Accuracy</label>
+                <label class="eval_metric_checkbox_item"><input type="checkbox" name="eval_metrics" value="precision"> Precision</label>
+                <label class="eval_metric-checkbox_item"><input type="checkbox" name="eval_metrics" value="recall"> Recall</label>
+                <label class="eval_metric-checkbox_item"><input type="checkbox" name="eval_metrics" value="f1_score"> F1-Score</label>
+                <label class="eval_metric-checkbox_item"><input type="checkbox" name="eval_metrics" value="confusion_matrix"> Confusion Matrix</label>
+                <label class="eval_metric-checkbox_item"><input type="checkbox" name="eval_metrics" value="classification_report"> Classification Report</label>
             </div>
         </div>
 
@@ -44,4 +70,6 @@
         </div>
     </form>
 </div>
+
+<script src="{% static 'train.js' %}"></script>
 {% endblock %}

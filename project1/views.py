@@ -58,7 +58,7 @@ def train(request):
             X = df.iloc[:, :-1]
             y = df.iloc[:, -1]
 
-            selected_metrics = request.POST.getlist('metrics')
+            selected_metrics = request.POST.getlist('eval_metrics')
 
             if y.dtype == 'object':
                 le = LabelEncoder()
@@ -66,17 +66,29 @@ def train(request):
             
             model_type = request.POST.get('model_type')
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_set_ratio, random_state=42)
+
+            seed_val = request.POST.get('random_state')
+            is_random = request.POST.get('none_checkbox')
+
+            if is_random or not seed_val:
+                final_seed = None
+            else:
+                final_seed = int(seed_val)
+
+            weight_selection = request.POST.get('class_weight')
+            final_weight = None if weight_selection == 'none' else 'balanced'
             
             if model_type.lower() == 'rfc':
-                model = RandomForestClassifier()
+                model = RandomForestClassifier(random_state=final_seed, class_weight=final_weight)
             elif model_type.lower() == 'svm': 
-                model = SVC() 
+                model = SVC(random_state=final_seed, class_weight=final_weight)
             elif model_type.lower() == 'knn': 
-                model = KNeighborsClassifier()
+                knn_weight = 'distance' if final_weight == 'balanced' else 'uniform'
+                model = KNeighborsClassifier(weights=knn_weight)
             elif model_type.lower() == 'dtc': 
-                model = DecisionTreeClassifier() 
+                model = DecisionTreeClassifier(random_state=final_seed, class_weight=final_weight)
             elif model_type.lower() == 'log_reg': 
-                model = LogisticRegression() 
+                model = LogisticRegression(random_state=final_seed, class_weight=final_weight)
 
             
             model.fit(X_train, y_train)
