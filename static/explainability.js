@@ -1,4 +1,3 @@
-// Wrap everything in a DOMContentLoaded listener so it waits for the HTML to load
 document.addEventListener("DOMContentLoaded", function () {
     
     // Grab data cleanly from the HTML hidden script blocks
@@ -8,10 +7,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const aleData = JSON.parse(document.getElementById('ale-data').textContent);
 
     // Dynamically retrieve the selected feature name from the dropdown to use as the X-axis label
-    const featureSelect = document.querySelector('select[name="feature"]');
-    const activeFeatureLabel = featureSelect ? featureSelect.value : 'Selected Feature Value';
+    const featureSelect = document.querySelector('select[name="features"]');
+    const activeFeatureLabel = featureSelect.value;
 
-    // Color palette mapped explicitly for Palmer Penguins species
+    // Color palette map for Palmer Penguins species
     const colors = { 
         'Adelie': '#04f7a6', 
         'Chinstrap': '#0a62ef', 
@@ -34,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false, // Prevents layout snapping or expanding out of bounds
+            maintainAspectRatio: false, 
             plugins: {
                 legend: {
                     position: 'top',
@@ -53,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 y: { 
                     title: { 
                         display: true, 
-                        text: 'Marginal Output Probability in Model Output',
+                        text: 'Marginal Output Probability',
                         font: { size: 13, weight: 'bold' },
                         color: '#4a5568'
                     },
@@ -108,3 +107,47 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+
+
+function toggleLrOptions() {
+    const modelType = document.getElementById('model_type').value;
+    const penaltySelect = document.getElementById('penalty');
+    const solverSelect = document.getElementById('solver');
+    const lrContainer = document.getElementById('lr-options');
+    
+    if (modelType === 'dtrc') {
+        // Make the dropdowns unclickable 
+        penaltySelect.disabled = true;
+        solverSelect.disabled = true;
+        
+        lrContainer.style.opacity = '0.4';
+    } else {
+        penaltySelect.disabled = false;
+        solverSelect.disabled = false;
+        lrContainer.style.opacity = '1';
+    }
+}
+
+function toggleSolverOptions() {
+    const penaltySelect = document.getElementById('penalty');
+    const solverSelect = document.getElementById('solver');
+
+    const lbfgsOption = document.getElementById('lbfgs');
+    const l1Option = document.querySelector('#penalty option[value="l1"]');
+
+    if (penaltySelect.value === 'l1') {
+        lbfgsOption.disabled = true;
+    } else {
+        lbfgsOption.disabled = false;
+    }
+
+    if (solverSelect.value === 'lbfgs') {
+        l1Option.disabled = true;
+    } else {
+        l1Option.disabled = false;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', toggleLrOptions);
+document.addEventListener('DOMContentLoaded', toggleSolverOptions);
+

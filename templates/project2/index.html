@@ -11,7 +11,7 @@
 
     <main class="dashboard-container">
         <h1>Project 2: Explainability Dashboard</h1>
-        <p class="subtitle-main">Human-Centric Artificial Intelligence — Palmer Penguins Dataset</p>
+        <p class="subtitle-main">Explainability Analysis — Palmer Penguins Dataset</p>
 
         <section class="card control-card">
             <h2>Global Settings & Active Model Selector</h2>
@@ -24,29 +24,50 @@
                 
                 <div>
                     <label for="model_type">Model Class Architecture:</label>
-                    <select name="model_type" onchange="this.form.submit()">
-                        <option value="tree" {% if model_type == 'tree' %}selected{% endif %}>Decision Tree Classifier</option>
+                    <select name="model_type" id="model_type" onchange="toggleLrOptions(); this.form.submit()">
+                        <option value="dtrc" {% if model_type == 'dtrc' %}selected{% endif %}>Decision Tree Classifier</option>
                         <option value="lr" {% if model_type == 'lr' %}selected{% endif %}>Logistic Regression</option>
                     </select>
                 </div>
 
+                <div id="lr-options">
+                    <div>
+                        <label for="penalty">Regularization Penalty:</label>
+                        <select name="regularizer_penalty" id="penalty" onchange="this.form.submit(); toggleSolverOptions()">
+                            <option value="l2" {% if regularizer_penalty == 'l2' %}selected{% endif %}>L2 Regularization (Ridge)</option>
+                            <option value="l1" {% if regularizer_penalty == 'l1' %}selected{% endif %}>L1 Regularization (Lasso)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                         <label for="solver">Solver Optimization Algorithm:</label>
+                         <select name="weight_solver" id="solver" onchange="this.form.submit(); toggleSolverOptions()">
+                             <option id="liblinear" value="liblinear" {% if weight_solver == 'liblinear' %}selected{% endif %}>liblinear (Supports L1/L2)</option>
+                             <option id="saga" value="saga" {% if weight_solver == 'saga' %}selected{% endif %}>saga (Supports L1/L2)</option>
+                             <option id="lbfgs" value="lbfgs" {% if weight_solver == 'lbfgs' %}selected{% endif %}>lbfgs (Default - Supports Only L2)</option>
+                         </select>
+                    </div>
+                </div>
+
+
+
                 <div>
                     <label for="feature">Global Feature Curve Selection (PDP/ALE):</label>
-                    <select name="feature" onchange="this.form.submit()">
+                    <select name="features" onchange="this.form.submit()">
                         {% for f in feature_names %}
                             <option value="{{ f }}" {% if f == selected_feature %}selected{% endif %}>{{ f }}</option>
                         {% endfor %}
                     </select>
                 </div>
 
-                <input type="hidden" name="sample_idx" value="{{ request.GET.sample_idx|default:'0' }}">
+                <input type="hidden" name="sample_idx" value="{{ sample_idx}}">
                 <input type="hidden" name="target_label" value="{{ target_label }}">
             </form>
         </section>
 
         <section class="card metrics-card">
             <h2>Model Optimization Overview</h2>
-            <p class="subtitle">Displays metrics for the model that minimizes the objective: <code>acc<sub>test</sub> + &lambda;&Omega;(g)</code></p>
+            <p class="subtitle">Displays metrics for the model that minimizes the objective: acc<sub>test</sub> + &lambda;&Omega;(g)</p>
             
             <div class="metrics-grid">
                 <div class="metric-item">
@@ -54,15 +75,15 @@
                     <span class="metric-value">{{ accuracy }}</span>
                 </div>
                 <div class="metric-item">
-                    <span class="metric-label">Model Structural Complexity (&Omega;(g)):</span>
+                    <span class="metric-label">Model Structure Complexity Measure (&Omega;(g)):</span>
                     <span class="metric-value">
                         {{ complexity_metric }} 
-                        {% if model_type == 'tree' %}Leaf Nodes{% else %}Non-Zero Weights (Sparsity){% endif %}
+                        {% if model_type == 'dtrc' %}Leaf Nodes{% else %}Non-Zero Weights (Sparsity){% endif %}
                     </span>
                 </div>
             </div>
 
-            {% if model_type == 'tree' and tree_graph %}
+            {% if model_type == 'dtrc' and tree_graph %}
             <div class="tree-rules-viewport" style="margin-top: 25px; border-top: 2px dashed #e2e8f0; padding-top: 20px; text-align: center;">
                 <h3 style="margin-bottom: 15px; color: #2d3748; text-align: left;">Resulting Optimized Decision Tree Structure</h3>
                 
@@ -75,7 +96,7 @@
 
         <section class="card counterfactual-card">
             <h2>Local Counterfactual Interpretability Engine</h2>
-            <p class="subtitle">Search for local counterfactual alternatives using a MAD-weighted L<sup>1</sup>-distance constraint matrix.</p>
+            <p class="subtitle">Search for local counterfactual alternatives using a MAD-weighted L<sup>1</sup>-distance constraint.</p>
             
             <form method="GET" action="" class="inline-flex-form local-cf-form">
                 <input type="hidden" name="lambda_value" value="{{ lambda_value }}">
@@ -142,7 +163,6 @@
 
         <section class="card plots-card">
             <h2>Custom Partial Dependence (PDP) & Accumulated Local Effects (ALE) Plots</h2>
-            <p class="subtitle">Scratch computed marginal feature impacts showing trend variations across all three species curves.</p>
 
             <div class="chart-flex-container">
                 <div class="chart-box">
