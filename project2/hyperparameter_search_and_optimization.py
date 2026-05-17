@@ -2,7 +2,7 @@ import numpy as np
 import graphviz
 from sklearn.tree import DecisionTreeClassifier, export_text, export_graphviz
 from sklearn.linear_model import LogisticRegression
-from sklearn.multiclass import OneVsRestClassifier
+
 
 
 def optimize_decision_tree(data, lambda_param):
