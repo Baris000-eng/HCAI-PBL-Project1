@@ -55,7 +55,7 @@ def index(request):
         'model_type': model_type,
         'selected_feature': selected_feature,
         'feature_names': data['feature_names'],
-        'accuracy': round(active_accuracy, 4),
+        'accuracy': round(active_accuracy, 6),
         'complexity_metric': active_complexity_measure,
         'tree_graph': tree_graph_html,
         'grid_labels': json.dumps([round(x, 2) for x in grid]),

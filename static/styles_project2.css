@@ -274,7 +274,7 @@ tr:hover td {
     color: #4a5568;
 }
 
-/* Make sure the canvas uses all available vertical parent room */
+/* Create the canvas to utilize all available vertical space */
 .chart-box canvas {
     flex-grow: 1;
     width: 100%;

@@ -73,7 +73,7 @@ def compute_ale_curves(active_model, data, model_type, selected_feature):
     num_intervals = len(bins) - 1
     local_diffs = {str(cls): np.zeros(num_intervals) for cls in master_classes}
     
-    # Create a string-mapped index lookup to prevent silent class mismatch bugs
+    # Create an index lookup list 
     model_classes_list = [str(c) for c in active_model.classes_]
     
     # Compute local differences across bins

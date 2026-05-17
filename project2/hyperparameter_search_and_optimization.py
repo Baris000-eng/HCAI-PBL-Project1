@@ -6,7 +6,7 @@ from sklearn.multiclass import OneVsRestClassifier
 
 
 def optimize_decision_tree(data, lambda_param):
-    best_dt_objective = float('inf')  # Looking for the maximum regularized score
+    best_dt_objective = float('inf')  
     best_dt = None
 
     X_train = data['X_train']
